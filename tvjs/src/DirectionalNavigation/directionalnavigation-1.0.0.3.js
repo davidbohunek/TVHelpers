@@ -525,6 +525,7 @@
         return document.activeElement === element;
     }
     function _isFocusable(element) {
+        var matchesSelector = false;
         for (var i = 0, len = FocusableSelectors.length; i < len; i++) {
             if (_matchesSelector(element, FocusableSelectors[i])) {
                 if (isNaN(tabIndex)) {
