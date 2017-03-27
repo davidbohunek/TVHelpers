@@ -108,13 +108,6 @@
         focusChanged: "focuschanged"
     };
     var FocusableTagNames = [
-        "A",
-        "BUTTON",
-        "IFRAME",
-        "INPUT",
-        "SELECT",
-        "TEXTAREA",
-        "X-MS-WEBVIEW"
     ];
     var FocusableSelectors = [];
 
