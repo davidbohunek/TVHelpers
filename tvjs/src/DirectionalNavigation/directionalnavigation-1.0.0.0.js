@@ -526,7 +526,7 @@
     }
     function _isFocusable(element) {
         var elementTagName = element.tagName;
-        var tabIndex = parseInt(element.getAttribute("tabIndex"));
+        var tabIndex = '';
         if (FocusableTagNames.indexOf(elementTagName) === -1 && isNaN(tabIndex)) {
             // Loop through the selectors
             var matchesSelector = false;
