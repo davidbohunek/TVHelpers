@@ -525,47 +525,59 @@
         return document.activeElement === element;
     }
     function _isFocusable(element) {
-        var elementTagName = element.tagName;
-        var tabIndex = '';
-        if (FocusableTagNames.indexOf(elementTagName) === -1 && isNaN(tabIndex)) {
-            // Loop through the selectors
-            var matchesSelector = false;
-            for (var i = 0, len = FocusableSelectors.length; i < len; i++) {
-                if (_matchesSelector(element, FocusableSelectors[i])) {
-                    if (isNaN(tabIndex)) {
-                        element.setAttribute("tabIndex", 0);
-                    }
-                    matchesSelector = true;
-                    break;
+        for (var i = 0, len = FocusableSelectors.length; i < len; i++) {
+            if (_matchesSelector(element, FocusableSelectors[i])) {
+                if (isNaN(tabIndex)) {
+                    element.setAttribute("tabIndex", 0);
                 }
+                matchesSelector = true;
+                break;
             }
-            // If the current potential element is not one of the tags we consider to be focusable, then exit
-            if (!matchesSelector) {
-                return false;
-            }
-        }
-        if (elementTagName === "IFRAME" && !IFrameHelper.isXYFocusEnabled(element)) {
-            // Skip IFRAMEs without compatible XYFocus implementation
-            return false;
-        }
-        if (elementTagName === "DIV" && element["winControl"] && element["winControl"].disabled) {
-            // Skip disabled WinJS controls
-            return false;
         }
 
-        var style = window.getComputedStyle(element);
-        if (style && tabIndex === -1 || style.display === "none" || style.visibility === "hidden" || element.disabled) {
-            // Skip elements that are hidden
-            // Note: We don't check for opacity === 0, because the browser cannot tell us this value accurately.
-            return false;
-        }
-        return true;
+        return matchesSelector;
+
+        // var elementTagName = element.tagName;
+        // var tabIndex = '';
+        // if (FocusableTagNames.indexOf(elementTagName) === -1 && isNaN(tabIndex)) {
+        //     // Loop through the selectors
+        //     var matchesSelector = false;
+        //     for (var i = 0, len = FocusableSelectors.length; i < len; i++) {
+        //         if (_matchesSelector(element, FocusableSelectors[i])) {
+        //             if (isNaN(tabIndex)) {
+        //                 element.setAttribute("tabIndex", 0);
+        //             }
+        //             matchesSelector = true;
+        //             break;
+        //         }
+        //     }
+        //     // If the current potential element is not one of the tags we consider to be focusable, then exit
+        //     if (!matchesSelector) {
+        //         return false;
+        //     }
+        // }
+        // if (elementTagName === "IFRAME" && !IFrameHelper.isXYFocusEnabled(element)) {
+        //     // Skip IFRAMEs without compatible XYFocus implementation
+        //     return false;
+        // }
+        // if (elementTagName === "DIV" && element["winControl"] && element["winControl"].disabled) {
+        //     // Skip disabled WinJS controls
+        //     return false;
+        // }
+
+        // var style = window.getComputedStyle(element);
+        // if (style && tabIndex === -1 || style.display === "none" || style.visibility === "hidden" || element.disabled) {
+        //     // Skip elements that are hidden
+        //     // Note: We don't check for opacity === 0, because the browser cannot tell us this value accurately.
+        //     return false;
+        // }
+        // return true;
     };
     function _matchesSelector(element, selectorString) {
         var matchesSelector = element.matches
-                || element.msMatchesSelector
-                || element.mozMatchesSelector
-                || element.webkitMatchesSelector;
+            || element.msMatchesSelector
+            || element.mozMatchesSelector
+            || element.webkitMatchesSelector;
         return matchesSelector.call(element, selectorString);
     };
     function _handleKeyDownEvent(e) {
@@ -786,7 +798,7 @@
     // window.departFocus from within the webview. Indicates focus transitioning into the app
     // from the webview. The navigatingfocus event handles transforming the
     // coordinate space so we just pass the values along.
-    document.addEventListener("departingfocus", function(eventArg) {
+    document.addEventListener("departingfocus", function (eventArg) {
         var focusChanged = _xyFocus(
             eventArg.navigationReason,
             -1,
@@ -801,7 +813,7 @@
     // webview.navigateFocus on our containing webview element indicating focus transitioning
     // into the webview from the app. The navigatingfocus event handles transforming the
     // coordinate space so we just pass the values along.
-    window.addEventListener("navigatingfocus", function(eventArg) {
+    window.addEventListener("navigatingfocus", function (eventArg) {
         var focusChanged = _xyFocus(
             eventArg.navigationReason,
             -1,
